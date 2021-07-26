@@ -110,12 +110,12 @@ app.patch("/userDB/:id", async (req, res) => {
               break;
             }
             console.log(JSON.stringify(array1[i]) + "---------\n");
-            if (!foundID)
-              return res.send({
-                status: "failure",
-                message: "No such user exists!",
-              });
           }
+          if (!foundID)
+            return res.send({
+              status: "failure",
+              message: "No such user exists!",
+            });
           if (updateFlag) {
             databaseFB
               .ref()
