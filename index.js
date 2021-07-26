@@ -65,43 +65,58 @@ app.patch("/userDB/:id", async (req, res) => {
       .get()
       .then((snapshot) => {
         if (snapshot.exists()) {
-          let array2 = snapshot.val();
-          let array1 = [...array2];
+          //   let array2 = snapshot.val();
+          //   let array1 = [...array2];
           let foundID = false;
-          for (let i = 0; i < array1.length; i++) {
+          for (let i = 0; i < snapshot.val().length; i++) {
             console.log(
-              JSON.stringify(array1[i]) + ".......\n" + req.params.id
+              JSON.stringify(snapshot.val()[i]) + ".......\n" + req.params.id
             );
-            if (array1[i]._id == req.params.id) {
-              if (req.body.name && req.body.name != array1[i].name) {
-                array1[i] = { ...array1[i], name: req.body.name };
+            if (snapshot.val()[i]._id == req.params.id) {
+              if (req.body.name && req.body.name != snapshot.val()[i].name) {
+                snapshot.val()[i] = {
+                  ...snapshot.val()[i],
+                  name: req.body.name,
+                };
                 updateFlag = true;
               }
-              if (req.body.email && req.body.email != array1[i].email) {
-                array1[i] = { ...array1[i], email: req.body.email };
+              if (req.body.email && req.body.email != snapshot.val()[i].email) {
+                snapshot.val()[i] = {
+                  ...snapshot.val()[i],
+                  email: req.body.email,
+                };
                 updateFlag = true;
               }
-              if (req.body.role && req.body.role != array1[i].role) {
-                array1[i] = { ...array1[i], role: req.body.role };
+              if (req.body.role && req.body.role != snapshot.val()[i].role) {
+                snapshot.val()[i] = {
+                  ...snapshot.val()[i],
+                  role: req.body.role,
+                };
                 updateFlag = true;
               }
               if (
                 req.body.active !== "undefined" &&
-                req.body.active != array1[i].active
+                req.body.active != snapshot.val()[i].active
               ) {
-                array1[i] = { ...array1[i], active: req.body.active };
+                snapshot.val()[i] = {
+                  ...snapshot.val()[i],
+                  active: req.body.active,
+                };
                 updateFlag = true;
               }
-              if (req.body.photo && req.body.photo != array1[i].photo) {
-                array1[i] = { ...array1[i], photo: req.body.photo };
+              if (req.body.photo && req.body.photo != snapshot.val()[i].photo) {
+                snapshot.val()[i] = {
+                  ...snapshot.val()[i],
+                  photo: req.body.photo,
+                };
                 updateFlag = true;
               }
               if (
                 req.body.password &&
-                req.body.password != array1[i].password
+                req.body.password != snapshot.val()[i].password
               ) {
-                array1[i] = {
-                  ...array1[i],
+                snapshot.val()[i] = {
+                  ...snapshot.val()[i],
                   password: req.body.password,
                 };
                 updateFlag = true;
@@ -109,7 +124,7 @@ app.patch("/userDB/:id", async (req, res) => {
               foundID = true;
               break;
             }
-            console.log(JSON.stringify(array1[i]) + "---------\n");
+            console.log(JSON.stringify(snapshot.val()[i]) + "---------\n");
             if (!foundID)
               return res.send({
                 status: "failure",
@@ -119,7 +134,7 @@ app.patch("/userDB/:id", async (req, res) => {
           if (updateFlag) {
             databaseFB
               .ref()
-              .update(array1)
+              .update(snapshot.val())
               .then(() => {
                 return res.send({ status: "success", message: "Done" });
               })
