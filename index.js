@@ -65,7 +65,8 @@ app.patch("/userDB/:id", async (req, res) => {
       .get()
       .then((snapshot) => {
         if (snapshot.exists()) {
-          let array1 = snapshot.val();
+          let array2 = snapshot.val();
+          let array1 = [...array2];
           let foundID = false;
           for (let i = 0; i < array1.length; i++) {
             console.log(
